@@ -7,9 +7,15 @@ mixin CacheManager {
     return true;
   }
 
-    Future<String?> getToken() async {
+  Future<String?> getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(CacheManagerKey.TOKEN.toString());
+  }
+
+  Future<void> logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove(CacheManagerKey.TOKEN.toString());
+    print("${prefs.get(CacheManagerKey.TOKEN.toString())}");
   }
 }
 

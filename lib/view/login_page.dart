@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:voco_task/model/login_request_model.dart';
 import 'package:voco_task/view/participants_page.dart';
 
@@ -16,6 +17,7 @@ class LoginPage extends ConsumerStatefulWidget {
 
 class _LoginPageState extends LoginController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   late LoginRequestModel requestModel;
@@ -30,89 +32,99 @@ class _LoginPageState extends LoginController {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 42, 42, 42),
+      backgroundColor: Color.fromARGB(255, 165, 165, 165),
       appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextFormField(
-              controller: emailController,
-              keyboardType: TextInputType.emailAddress,
-           
-              validator: (value) => !value!.contains("@")
-                  ? "Please enter correct email address!"
-                  : null,
-              decoration: const InputDecoration(hintText: 'Email'),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              controller: passwordController,
-              keyboardType: TextInputType.visiblePassword,
-        
-              validator: (value) => !value!.contains("@")
-                  ? "Password should be more than 3 characters!"
-                  : null,
-              decoration: InputDecoration(hintText: 'Password'),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            GestureDetector(
-              onTap: () {
-                // bool isValid = globalKey.currentState!.validate();
-                bool isValid = true;
-                requestModel.email = emailController.text;
-                requestModel.password = passwordController.text;
-                if (isValid) {
-                  fetchLogin(requestModel);
-                }
-
-                // LoginController().fetchLogin(requestModel).then((value) {
-                //   print(requestModel.toJson());
-                //   if (value.token!.isNotEmpty) {
-                //     ScaffoldMessenger.of(context).showSnackBar(
-                //       SnackBar(
-                //         content: Text("Login Succesfuled"),
-                //         duration: Duration(milliseconds: 300),
-                //       ),
-                //     );
-
-                //     Future.delayed(
-                //       Duration(seconds: 1),
-                //       () {
-                //         Navigator.push(
-                //             context,
-                //             MaterialPageRoute(
-                //               builder: (context) => ParticipantsPage(),
-                //             ));
-                //       },
-                //     );
-                //   } else {
-                //     ScaffoldMessenger.of(context).showSnackBar(
-                //       SnackBar(
-                //         content: Text("Incremendfdfdfdfted"),
-                //         duration: Duration(milliseconds: 300),
-                //       ),
-                //     );
-                //   }
-                // });
-              },
-              child: Container(
-                height: 50,
-                decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Center(
-                  child: Text('Login'),
-                ),
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextFormField(
+                controller: emailController,
+                keyboardType: TextInputType.emailAddress,
+                validator: (value) => !value!.contains("@")
+                    ? "Please enter correct email address!"
+                    : null,
+                decoration: const InputDecoration(hintText: 'Email'),
               ),
-            )
-          ],
+              const SizedBox(
+                height: 20,
+              ),
+              TextFormField(
+                controller: passwordController,
+                keyboardType: TextInputType.visiblePassword,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'This field cannot be left blank';
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(hintText: 'Password'),
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              GestureDetector(
+                onTap: () {
+                  requestModel.email = emailController.text;
+                  requestModel.password = passwordController.text;
+
+                  if (requestModel.email!.isNotEmpty &&
+                      requestModel.password!.isNotEmpty &&
+                      requestModel.email!.contains("@")) {
+                    fetchLogin(requestModel);
+                  } else {
+                    Fluttertoast.showToast(
+                      msg: "Try Again",
+                      backgroundColor: Colors.red,
+                    );
+                  }
+
+                  // LoginController().fetchLogin(requestModel).then((value) {
+                  //   print(requestModel.toJson());
+                  //   if (value.token!.isNotEmpty) {
+                  //     ScaffoldMessenger.of(context).showSnackBar(
+                  //       SnackBar(
+                  //         content: Text("Login Succesfuled"),
+                  //         duration: Duration(milliseconds: 300),
+                  //       ),
+                  //     );
+
+                  //     Future.delayed(
+                  //       Duration(seconds: 1),
+                  //       () {
+                  //         Navigator.push(
+                  //             context,
+                  //             MaterialPageRoute(
+                  //               builder: (context) => ParticipantsPage(),
+                  //             ));
+                  //       },
+                  //     );
+                  //   } else {
+                  //     ScaffoldMessenger.of(context).showSnackBar(
+                  //       SnackBar(
+                  //         content: Text("Incremendfdfdfdfted"),
+                  //         duration: Duration(milliseconds: 300),
+                  //       ),
+                  //     );
+                  //   }
+                  // });
+                },
+                child: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Center(
+                    child: Text('Login'),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

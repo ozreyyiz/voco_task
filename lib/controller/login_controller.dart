@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 import 'package:voco_task/core/cache_manager.dart';
 import 'package:voco_task/model/login_request_model.dart';
@@ -12,6 +13,8 @@ import '../service/login_service.dart';
 
 abstract class LoginController extends ConsumerState<LoginPage>
     with CacheManager {
+  final formKey = GlobalKey<FormState>();
+
   late final LoginService loginService;
   final globalKey = GlobalKey<FormState>();
 
@@ -28,6 +31,8 @@ abstract class LoginController extends ConsumerState<LoginPage>
     if (response != null) {
       saveToken(response.token ?? "");
       navigateToHome();
+    } else {
+    
     }
   }
 

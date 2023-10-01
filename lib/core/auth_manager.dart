@@ -16,6 +16,12 @@ class AuthenticationManager with CacheManager {
       isLogin = true;
     }
   }
+
+    void signout() {
+    logout();
+    userModel = null;
+    isLogin = false;
+  }
 }
 
 final AuthProvider = Provider((ref) => AuthenticationManager());
