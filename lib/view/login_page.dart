@@ -1,24 +1,23 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:voco_task/model/login_request_model.dart';
 import 'package:voco_task/view/participants_page.dart';
 
 import '../controller/login_controller.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends LoginController {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController emailController = TextEditingController();
-
   final TextEditingController passwordController = TextEditingController();
-
   late LoginRequestModel requestModel;
 
   @override
@@ -42,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
             TextFormField(
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
-              onSaved: (input) => requestModel.email = input,
+           
               validator: (value) => !value!.contains("@")
                   ? "Please enter correct email address!"
                   : null,
@@ -54,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
             TextFormField(
               controller: passwordController,
               keyboardType: TextInputType.visiblePassword,
-              onSaved: (input) => requestModel.password = input,
+        
               validator: (value) => !value!.contains("@")
                   ? "Password should be more than 3 characters!"
                   : null,
@@ -65,38 +64,43 @@ class _LoginPageState extends State<LoginPage> {
             ),
             GestureDetector(
               onTap: () {
+                // bool isValid = globalKey.currentState!.validate();
+                bool isValid = true;
                 requestModel.email = emailController.text;
                 requestModel.password = passwordController.text;
+                if (isValid) {
+                  fetchLogin(requestModel);
+                }
 
-                LoginController().loginUser(requestModel).then((value) {
-                  print(requestModel.toJson());
-                  if (value.token!.isNotEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("Login Succesfuled"),
-                        duration: Duration(milliseconds: 300),
-                      ),
-                    );
+                // LoginController().fetchLogin(requestModel).then((value) {
+                //   print(requestModel.toJson());
+                //   if (value.token!.isNotEmpty) {
+                //     ScaffoldMessenger.of(context).showSnackBar(
+                //       SnackBar(
+                //         content: Text("Login Succesfuled"),
+                //         duration: Duration(milliseconds: 300),
+                //       ),
+                //     );
 
-                    Future.delayed(
-                      Duration(seconds: 1),
-                      () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ParticipantsPage(),
-                            ));
-                      },
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("Incremendfdfdfdfted"),
-                        duration: Duration(milliseconds: 300),
-                      ),
-                    );
-                  }
-                });
+                //     Future.delayed(
+                //       Duration(seconds: 1),
+                //       () {
+                //         Navigator.push(
+                //             context,
+                //             MaterialPageRoute(
+                //               builder: (context) => ParticipantsPage(),
+                //             ));
+                //       },
+                //     );
+                //   } else {
+                //     ScaffoldMessenger.of(context).showSnackBar(
+                //       SnackBar(
+                //         content: Text("Incremendfdfdfdfted"),
+                //         duration: Duration(milliseconds: 300),
+                //       ),
+                //     );
+                //   }
+                // });
               },
               child: Container(
                 height: 50,
