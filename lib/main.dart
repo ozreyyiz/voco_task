@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:voco_task/controller/login_controller.dart';
-import 'package:voco_task/view/login_page.dart';
 import 'package:voco_task/view/participants_page.dart';
-import 'package:voco_task/view/splash_screen.dart';
 
 
 void main() {
@@ -17,10 +14,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.grey,
+        primarySwatch: Colors.orange,
+        
+        
       ),
-      home:const SplashScreen(),
+      home: const ParticipantsPage(),
     );
   }
 }

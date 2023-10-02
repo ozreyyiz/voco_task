@@ -5,8 +5,8 @@ class LoginResponseModel {
   LoginResponseModel({this.token, this.error});
 
   LoginResponseModel.fromJson(Map<String, dynamic> json) {
-    token = json['token']!= null? json['token']:"";
-    error = json['error']!= null? json['error']:"";
+    token = json['token'] ?? "";
+    error = json['error'] ?? "";
   }
 
   Map<String, dynamic> toJson() {
