@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:voco_task/view/participants_page.dart';
+import 'package:voco_task/view/onboarding_page/onboarding_page.dart';
 
 
 void main() {
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         
         
       ),
-      home: const ParticipantsPage(),
+      home: const OnboardingPage(),
     );
   }
 }
